@@ -9,6 +9,33 @@
 
 [Keycloak について、こちらを参照してください。](./frontend/manuals/keycloak.md)
 
+# アーキテクチャ
+
+```
+[ ユーザー(ブラウザ) ]
+          |
+       (HTTP)
+          |
+  [ NGINXリバースプロキシ ]
+         |                 \
+ ("/"や"/api"パス)         ("/auth"パス(例))
+         v                  v
+   [ Next.jsアプリ ]      [ Keycloakサーバ ]
+        |                    |
+        | <---(OIDC等)-----> |
+        |                    |
+        |      (トークン)    |
+    　　|<------------------ |
+        |
+    [ アプリDBや外部API ]
+```
+
+- 今回は学習用なので、HTTPプロトコルでOK。
+- ユーザーは Keycloak へログインして、トークンを取得する。
+- そのトークンを使って、Next.js アプリケーションへアクセスする。
+- アプリケーションはトークンを検証して、ユーザーの認証状態を確認する。
+- 認証状態に応じて、ユーザーに適切なページを表示する。
+
 ## Tech Stack
 
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
